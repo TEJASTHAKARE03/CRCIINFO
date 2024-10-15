@@ -1,0 +1,692 @@
+api.js:-// Common API key for all functions
+const API_KEY = '9459b66a-350c-4102-830b-40c45e804b80';
+
+// Function to fetch current match data from the API
+async function fetchMatches() {
+    const API_URL = `https://api.cricapi.com/v1/currentMatches?apikey=${API_KEY}&offset=0`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error fetching match data:', error);
+    }
+}
+
+// Function to fetch player list data from the API
+async function fetchPlayerList() {
+    const API_URL = `https://api.cricapi.com/v1/players?apikey=${API_KEY}&offset=0`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error fetching player list data:', error);
+    }
+}
+
+// Function to fetch player search data from the API
+async function searchPlayer(query) {
+    const API_URL = `https://api.cricapi.com/v1/players?apikey=${API_KEY}&offset=0&search=${query}`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error searching for players:', error);
+    }
+}
+
+// Function to create a match card element
+function createMatchCard(match) {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.innerHTML = `
+      <div class="match-info">
+        <h3>${match.name}</h3>
+        <p>${match.status}</p>
+        <p>${match.venue}</p>
+        <p>${match.date}</p>
+      </div>
+      <div class="match-score">
+        <h4>Scores:</h4>
+        ${match.score.map((inning, index) => `
+          <div class="inning-score">
+            <h5>Inning ${index + 1}:</h5>
+            <p>Runs: ${inning.r}</p>
+            <p>Wickets: ${inning.w}</p>
+            <p>Overs: ${inning.o}</p>
+            <p>${inning.inning}</p>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    return card;
+}
+
+
+// Function to render match cards on the page
+async function renderMatches() {
+    const matchCardsContainer = document.getElementById('match-cards');
+    const matches = await fetchMatches();
+    if (!matches || matches.length === 0) {
+        matchCardsContainer.innerHTML = '<p>No matches found.</p>';
+        return;
+    }
+    matchCardsContainer.innerHTML = ''; // Clear previous content
+    matches.forEach((match) => {
+        const card = createMatchCard(match);
+        matchCardsContainer.appendChild(card);
+    });
+}
+// Function to render Player List
+async function renderPlayersList() {
+    const playersContainer = document.getElementById('players-container');
+    hideContainersExcept('players-container');
+
+    const playerData = await fetchPlayerList();
+
+    if (!playerData || playerData.length === 0) {
+        playersContainer.innerHTML = '<p>No players found.</p>';
+        return;
+    }
+
+    playerData.forEach((player) => {
+        const playerCard = createPlayerCard(player);
+        playersContainer.appendChild(playerCard);
+    });
+}
+
+// Function to render Player Search results
+async function renderPlayerSearchResults(query) {
+    const playersContainer = document.getElementById('players-container');
+    hideContainersExcept('players-container');
+
+    const searchResults = await searchPlayer(query);
+
+    if (!searchResults || searchResults.length === 0) {
+        playersContainer.innerHTML = '<p>No matching players found.</p>';
+        return;
+    }
+
+    playersContainer.innerHTML = ''; // Clear previous content
+    searchResults.forEach((player) => {
+        const playerCard = createPlayerCard(player);
+        playersContainer.appendChild(playerCard);
+    });
+}
+
+// Function to create a player card element
+function createPlayerCard(player) {
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.innerHTML = `
+      <h3>${player.name}</h3>
+      <p>Country: ${player.country}</p>
+      
+    `;
+    return card;
+}
+function createPlayerCard(player) {
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.innerHTML = `
+      <h3>${player.name}</h3>
+      <p>Country: ${player.country}</p>
+    `;
+    card.style.backgroundColor = '#f786cd'; // Set the card background color
+    card.style.color = 'white'; // Set the text color
+    card.style.borderRadius = '10px';
+    card.style.padding = '15px';
+    card.style.margin = '20px';
+    card.style.boxShadow = '0 4px 8px 0 rgba(171, 25, 25, 0.2)';
+    return card;
+}
+
+// Function to hide all containers except the specified one
+function hideContainersExcept(containerId) {
+    const containers = document.querySelectorAll('.container');
+    containers.forEach((container) => {
+        if (container.id === containerId) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+}
+
+// Call the renderMatches function when the page loads
+document.addEventListener('DOMContentLoaded', renderMatches);
+
+// Add event listeners for the navigation items
+document.getElementById('current-matches').addEventListener('click', () => {
+    renderMatches();
+});
+
+document.getElementById('player-list').addEventListener('click', () => {
+    renderPlayersList();
+});
+
+document.getElementById('player-search').addEventListener('click', () => {
+    const searchQuery = prompt('Enter a player name to search:');
+    if (searchQuery) {
+        renderPlayerSearchResults(searchQuery);
+    }
+});
+
+// Common API key for all functions
+const API_KEY = '9459b66a-350c-4102-830b-40c45e804b80';
+
+// Function to fetch current match data from the API
+async function fetchMatches() {
+    const API_URL = `https://api.cricapi.com/v1/currentMatches?apikey=${API_KEY}&offset=0`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error fetching match data:', error);
+    }
+}
+
+// Function to fetch player list data from the API
+async function fetchPlayerList() {
+    const API_URL = `https://api.cricapi.com/v1/players?apikey=${API_KEY}&offset=0`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error fetching player list data:', error);
+    }
+}
+
+// Function to fetch player search data from the API
+async function searchPlayer(query) {
+    const API_URL = `https://api.cricapi.com/v1/players?apikey=${API_KEY}&offset=0&search=${query}`;
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error searching for players:', error);
+    }
+}
+
+// Function to create a match card element
+function createMatchCard(match) {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.innerHTML = `
+      <div class="match-info">
+        <h3>${match.name}</h3>
+        <p>${match.status}</p>
+        <p>${match.venue}</p>
+        <p>${match.date}</p>
+      </div>
+      <div class="match-score">
+        <h4>Scores:</h4>
+        ${match.score.map((inning, index) => `
+          <div class="inning-score">
+            <h5>Inning ${index + 1}:</h5>
+            <p>Runs: ${inning.r}</p>
+            <p>Wickets: ${inning.w}</p>
+            <p>Overs: ${inning.o}</p>
+            <p>${inning.inning}</p>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    return card;
+}
+
+
+// Function to render match cards on the page
+async function renderMatches() {
+    const matchCardsContainer = document.getElementById('match-cards');
+    const matches = await fetchMatches();
+    if (!matches || matches.length === 0) {
+        matchCardsContainer.innerHTML = '<p>No matches found.</p>';
+        return;
+    }
+    matchCardsContainer.innerHTML = ''; // Clear previous content
+    matches.forEach((match) => {
+        const card = createMatchCard(match);
+        matchCardsContainer.appendChild(card);
+    });
+}
+// Function to render Player List
+async function renderPlayersList() {
+    const playersContainer = document.getElementById('players-container');
+    hideContainersExcept('players-container');
+
+    const playerData = await fetchPlayerList();
+
+    if (!playerData || playerData.length === 0) {
+        playersContainer.innerHTML = '<p>No players found.</p>';
+        return;
+    }
+
+    playerData.forEach((player) => {
+        const playerCard = createPlayerCard(player);
+        playersContainer.appendChild(playerCard);
+    });
+}
+
+// Function to render Player Search results
+async function renderPlayerSearchResults(query) {
+    const playersContainer = document.getElementById('players-container');
+    hideContainersExcept('players-container');
+
+    const searchResults = await searchPlayer(query);
+
+    if (!searchResults || searchResults.length === 0) {
+        playersContainer.innerHTML = '<p>No matching players found.</p>';
+        return;
+    }
+
+    playersContainer.innerHTML = ''; // Clear previous content
+    searchResults.forEach((player) => {
+        const playerCard = createPlayerCard(player);
+        playersContainer.appendChild(playerCard);
+    });
+}
+
+// Function to create a player card element
+function createPlayerCard(player) {
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.innerHTML = `
+      <h3>${player.name}</h3>
+      <p>Country: ${player.country}</p>
+      
+    `;
+    return card;
+}
+function createPlayerCard(player) {
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.innerHTML = `
+      <h3>${player.name}</h3>
+      <p>Country: ${player.country}</p>
+    `;
+    card.style.backgroundColor = '#f786cd'; // Set the card background color
+    card.style.color = 'white'; // Set the text color
+    card.style.borderRadius = '10px';
+    card.style.padding = '15px';
+    card.style.margin = '20px';
+    card.style.boxShadow = '0 4px 8px 0 rgba(171, 25, 25, 0.2)';
+    return card;
+}
+
+// Function to hide all containers except the specified one
+function hideContainersExcept(containerId) {
+    const containers = document.querySelectorAll('.container');
+    containers.forEach((container) => {
+        if (container.id === containerId) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    });
+}
+
+// Call the renderMatches function when the page loads
+document.addEventListener('DOMContentLoaded', renderMatches);
+
+// Add event listeners for the navigation items
+document.getElementById('current-matches').addEventListener('click', () => {
+    renderMatches();
+});
+
+document.getElementById('player-list').addEventListener('click', () => {
+    renderPlayersList();
+});
+
+document.getElementById('player-search').addEventListener('click', () => {
+    const searchQuery = prompt('Enter a player name to search:');
+    if (searchQuery) {
+        renderPlayerSearchResults(searchQuery);
+    }
+});
+server.js:-// Start the Express server
+const express = require('express');
+const axios = require('axios');
+
+const app = express();
+const port = 3000; // Change to your desired port
+const cors = require('cors');
+
+// Define your API keys for different endpoints
+const currentMatchesApiKey = '9459b66a-350c-4102-830b-40c45e804b80';
+
+// Create a route to fetch current matches
+app.get('/fetchCurrentMatches', async (req, res) => {
+  try {
+    const apiUrl = 'https://api.cricapi.com/v1/currentMatches'; // Replace with the actual URL
+    const response = await axios.get(`${apiUrl}?apikey=${currentMatchesApiKey}&offset=0`);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to fetch data from the API' });
+  }
+});
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+matchl.html:-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWC Match Center</title>
+    <link rel="stylesheet" type="text/css" href="matchl.css">
+</head>
+<body>
+    <header>
+        <h1>MATCH CENTRE</h1>
+        <nav>
+            <ul>
+                <li><a href="#" id="current-matches">Current Matches</a></li>
+                <li><a href="#" id="player-list">Player List</a></li>
+                <li><a href="#" id="player-search">Player Search</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="match-cards" class="container"></div>
+        <div id="players-container" class="container"></div>
+        <!-- Ongoing match cards will be dynamically added here -->
+    </main>
+    <script src="api.js"></script>
+</body>
+</html>
+home.html:-<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWC Home Page</title>
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+<body>
+    <header>
+        
+        <div class="nations-loop">
+            <!-- Add 8 images for the looping effect -->
+            <img src="afgan.jpg" alt="Nation 1">
+            <img src="aus.jpeg" alt="Nation 2">
+            <img src ="ind.jpeg" alt="Nation 3">
+            <img src="net.jpeg" alt="Nation 4">
+            <img src="pak.jpeg" alt="Nation 5">
+            <img src="NZ.jpeg" alt="Nation 6">
+            <img src="sl.jpeg" alt="Nation 7">
+            <img src="rasf.jpeg" alt="Nation 8">
+        </div>
+    </header>
+    <main>
+        
+        <a class="match-center-button" href="matchl.html">MATCH CENTER</a>
+
+    </main>
+    <footer>
+        <div class="sponsors">
+            <!-- Sponsor images go here -->
+            <img src="sponers.png">
+        </div>
+        <div class="links">
+            <!-- 6 links go here -->
+            <a href="https://www.icc-cricket.com/homepage">Visit Example Website</a>
+            <a href="https://www.icc-cricket.com/rankings/mens/overview">Visit Example Website</a>
+            <a href="https://www.icc-cricket.com/about">Visit Example Website</a>
+            <a href="https://www.icc-cricket.com/shop">Visit Example Website</a>
+            <a href="https://www.cricketworldcup.com/">Visit Example Website</a>
+            <a href="https://www.example.com">Visit Example Website</a>
+
+            
+        </div>
+        
+    </footer>
+    
+</body>
+</html>
+
+matchl.css:-
+/* Set character encoding to utf-8 */
+@charset "utf-8";
+/* Reset some default styles */
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the theme colors */
+body {
+    background-color: #320073; /* Dark purple */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #fd53bf; /* Pink */
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+/* Style the match cards */
+.match-card {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.match-card:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Add box shadow and adjust padding for better aesthetics */
+.match-card {
+    box-shadow: 0 4px 8px 0 rgba(171, 25, 25, 0.2);
+    padding: 15px;
+    height: 100;
+}
+
+/* Style the match details button */
+.match-details-button {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin: 1px;
+    float: right;
+    top: 40%; /* Center vertically */
+    left: 50%;
+    /*transform: translate(-50%, -50%); */
+     /* Move the button to the right side */
+}
+
+.match-details-button:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Center the button horizontally and vertically */
+.match-details-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Add pink hover effect to match cards and player cards */
+.player-card {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+ .player-card:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Add box shadow and adjust padding for better aesthetics */
+ .player-card {
+    box-shadow: 0 4px 8px 0 rgba(171, 25, 25, 0.2);
+    padding: 15px;
+    height: 100;
+}
+
+/* Style the navigation bar */
+header nav {
+    background-color: #fc3cb6; /* Pink */
+    text-align: center;
+    padding: 10px 0;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+header nav ul li a:hover {
+    color: #ff0077; /* Darker pink on hover */
+}
+
+home.css:-
+
+/* Set character encoding to utf-8 */
+@charset "utf-8";
+/* Reset some default styles */
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the theme colors */
+body {
+    background: url('bck2.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Style the MATCH CENTER button */
+
+
+
+/* Style the MATCH CENTER button */
+/* Style the "Match Center" link as a button */
+.match-center-button {
+    display: inline-block;
+    background-color:  #f786cd; /* Your button color */
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px; /* Adjust the padding to increase the button size */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    top: 280px;
+}
+
+.match-center-button:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+
+/* Style the looping nation images */
+.nations-loop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+    width: 2800px; /* Adjust the width to accommodate all 8 images */
+    overflow: hidden;
+    animation: moveLoop 15s linear infinite; /* You can adjust the duration as needed */
+}
+
+@keyframes moveLoop {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-2800px); /* Adjust this value to match the total width of your images */
+    }
+}
+
+/* Style the sponsor images and links */
+.sponsors {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px; /* Set height to 100px */
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Stretch across the bottom */
+}
+
+.sponsors img {
+    max-width: 1000px;
+    margin:  20px;
+}
+
+.links {
+    
+    text-align: center;
+    margin-top: 1200px;
+    padding: 10px 20px;
+}
+
+
+.links a {
+    color: white;
+    text-decoration: none;
+    margin:  20px;
+    font-size: 20px;
+}
+

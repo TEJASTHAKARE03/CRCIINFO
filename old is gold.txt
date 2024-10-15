@@ -1,0 +1,125 @@
+/* Reset some default styles */
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the theme colors */
+body {
+    background-color: #320073; /* Dark purple */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #f786cd; /* Pink */
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+/* Style the match cards */
+.match-card {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.match-card:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Add box shadow and adjust padding for better aesthetics */
+.match-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    height: 100;
+}
+
+/* Style the match details button */
+.match-details-button {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin: 1px;
+    float: right;
+    top: 40%; /* Center vertically */
+    left: 50%;
+    /*transform: translate(-50%, -50%); */
+     /* Move the button to the right side */
+}
+
+.match-details-button:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Center the button horizontally and vertically */
+.match-details-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.html:-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWC Match List</title>
+    <link rel="stylesheet" type="text/css" href="matchl.css">
+</head>
+<body>
+    <header>
+        <h1>CURRENT MATCHES</h1>
+    </header>
+    <main>
+        <div id="match-cards">
+            <!-- Ongoing match cards will be dynamically added here -->
+        </div>
+    </main>
+    <script src="api.js"></script>
+</body>
+</html>
+' 9459b66a-3sec-41e2-83eb-4ec45e8e4b80' ;
+server.js:-const express = require('express');
+const axios = require('axios');
+
+const app = express();
+const port = 3000; // Change to your desired port
+const cors = require('cors');
+app.use(cors());
+
+
+// Create a route to fetch data from the cricket API
+app.get('/fetchCricketData', async (req, res) => {
+  try {
+    // Define the API URL and API key
+    const apiUrl = 'https://api.cricapi.com/v1/currentMatches';
+    const apiKey = '9459b66a-350c-4102-830b-40c45e804b80';
+
+    // Make an HTTP GET request to the API
+    const response = await axios.get(`${apiUrl}?apikey=${apiKey}&offset=0`);
+
+    // Respond with the data from the API
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to fetch data from the API' });
+  }
+});
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

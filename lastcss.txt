@@ -1,0 +1,124 @@
+/* Set character encoding to utf-8 */
+@charset "utf-8";
+/* Reset some default styles */
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the theme colors */
+body {
+    background-color: #320073; /* Dark purple */
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #fd53bf; /* Pink */
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+/* Style the match cards */
+.match-card {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.match-card:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Add box shadow and adjust padding for better aesthetics */
+.match-card {
+    box-shadow: 0 4px 8px 0 rgba(171, 25, 25, 0.2);
+    padding: 15px;
+    height: 100;
+}
+
+/* Style the match details button */
+.match-details-button {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    margin: 1px;
+    float: right;
+    top: 40%; /* Center vertically */
+    left: 50%;
+    /*transform: translate(-50%, -50%); */
+     /* Move the button to the right side */
+}
+
+.match-details-button:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Center the button horizontally and vertically */
+.match-details-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Add pink hover effect to match cards and player cards */
+.player-card {
+    background-color: #f786cd; /* Pink */
+    color: white;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+ .player-card:hover {
+    background-color: #ff0077; /* Darker pink on hover */
+}
+
+/* Add box shadow and adjust padding for better aesthetics */
+ .player-card {
+    box-shadow: 0 4px 8px 0 rgba(171, 25, 25, 0.2);
+    padding: 15px;
+    height: 100;
+}
+
+/* Style the navigation bar */
+header nav {
+    background-color: #fc3cb6; /* Pink */
+    text-align: center;
+    padding: 10px 0;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+header nav ul li a:hover {
+    color: #ff0077; /* Darker pink on hover */
+}
